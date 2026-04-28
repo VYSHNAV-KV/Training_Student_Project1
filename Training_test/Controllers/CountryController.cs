@@ -1,6 +1,4 @@
 
-
-
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using WebApplication3.Models;
@@ -20,7 +18,7 @@ public class CountryController : ControllerBase
         _connectionString = configuration.GetConnectionString("DefaultConnection");
     }
 
-    // ✅ GET ALL (Sorted + Clean)
+
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -43,7 +41,6 @@ public class CountryController : ControllerBase
         return Ok(list);
     }
 
-    // ✅ CREATE (EF Core)
     [HttpPost]
     public async Task<IActionResult> Create(Country country)
     {
@@ -53,7 +50,7 @@ public class CountryController : ControllerBase
         return Ok(new { message = "Country Added", id = country.Id });
     }
 
-    // ✅ UPDATE (EF Core)
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, Country country)
     {
@@ -65,34 +62,54 @@ public class CountryController : ControllerBase
         return Ok(new { message = "Updated Successfully", id });
     }
 
-    // ✅ PATCH (Direct Query)
     [HttpPatch("{id}")]
-    public IActionResult Patch(Guid id, [FromBody] Country country)
+    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonElement data)
     {
-        using var con = new NpgsqlConnection(_connectionString);
-        con.Open();
-        var updates = new List<string>();
-        var cmd = new NpgsqlCommand();
-        cmd.Connection = con;
-        if (!string.IsNullOrEmpty(country.Name))
-        {
-            updates.Add("\"Name\"=@name");
-            cmd.Parameters.AddWithValue("@name", country.Name);
-        }
-        if (country.SortOrder != 0)
-        {
-            updates.Add("\"SortOrder\"=@order");
-            cmd.Parameters.AddWithValue("@order", country.SortOrder);
-        }
-        if (updates.Count == 0) return BadRequest("No fields to update");
-        cmd.CommandText = $"UPDATE \"Countries\" SET {string.Join(",", updates)} WHERE \"Id\"=@id";
-        cmd.Parameters.AddWithValue("@id", id);
-        int rows = cmd.ExecuteNonQuery();
-        if (rows == 0) return NotFound("Country not found");
-        return Ok(new { message = "Updated Successfully", id });
+        var country = await _context.Countries.FindAsync(id);
+
+        if (country == null)
+            return NotFound("Country not found");
+
+
+        if (data.TryGetProperty("name", out var name))
+            country.Name = name.GetString();
+
+        if (data.TryGetProperty("sortOrder", out var sortOrder))
+            country.SortOrder = sortOrder.GetInt32();
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Patched Successfully", id });
     }
 
-    // ✅ DELETE (Direct Query with FK Check)
+    // ✅ PATCH (Direct Query)
+    //[HttpPatch("{id}")]
+    //public IActionResult Patch(Guid id, [FromBody] Country country)
+    //{
+    //    using var con = new NpgsqlConnection(_connectionString);
+    //    con.Open();
+    //    var updates = new List<string>();
+    //    var cmd = new NpgsqlCommand();
+    //    cmd.Connection = con;
+    //    if (!string.IsNullOrEmpty(country.Name))
+    //    {
+    //        updates.Add("\"Name\"=@name");
+    //        cmd.Parameters.AddWithValue("@name", country.Name);
+    //    }
+    //    if (country.SortOrder != 0)
+    //    {
+    //        updates.Add("\"SortOrder\"=@order");
+    //        cmd.Parameters.AddWithValue("@order", country.SortOrder);
+    //    }
+    //    if (updates.Count == 0) return BadRequest("No fields to update");
+    //    cmd.CommandText = $"UPDATE \"Countries\" SET {string.Join(",", updates)} WHERE \"Id\"=@id";
+    //    cmd.Parameters.AddWithValue("@id", id);
+    //    int rows = cmd.ExecuteNonQuery();
+    //    if (rows == 0) return NotFound("Country not found");
+    //    return Ok(new { message = "Updated Successfully", id });
+    //}
+
+
     [HttpDelete("{id}")]
     public IActionResult Delete(Guid id)
     {
