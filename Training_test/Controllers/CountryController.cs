@@ -82,32 +82,7 @@ public class CountryController : ControllerBase
         return Ok(new { message = "Patched Successfully", id });
     }
 
-    // ✅ PATCH (Direct Query)
-    //[HttpPatch("{id}")]
-    //public IActionResult Patch(Guid id, [FromBody] Country country)
-    //{
-    //    using var con = new NpgsqlConnection(_connectionString);
-    //    con.Open();
-    //    var updates = new List<string>();
-    //    var cmd = new NpgsqlCommand();
-    //    cmd.Connection = con;
-    //    if (!string.IsNullOrEmpty(country.Name))
-    //    {
-    //        updates.Add("\"Name\"=@name");
-    //        cmd.Parameters.AddWithValue("@name", country.Name);
-    //    }
-    //    if (country.SortOrder != 0)
-    //    {
-    //        updates.Add("\"SortOrder\"=@order");
-    //        cmd.Parameters.AddWithValue("@order", country.SortOrder);
-    //    }
-    //    if (updates.Count == 0) return BadRequest("No fields to update");
-    //    cmd.CommandText = $"UPDATE \"Countries\" SET {string.Join(",", updates)} WHERE \"Id\"=@id";
-    //    cmd.Parameters.AddWithValue("@id", id);
-    //    int rows = cmd.ExecuteNonQuery();
-    //    if (rows == 0) return NotFound("Country not found");
-    //    return Ok(new { message = "Updated Successfully", id });
-    //}
+    
 
 
     [HttpDelete("{id}")]

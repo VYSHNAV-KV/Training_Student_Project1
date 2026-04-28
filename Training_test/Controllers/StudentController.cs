@@ -60,20 +60,6 @@ public class StudentController : ControllerBase
     }
 
 
-    //[HttpPut("{id}")]
-    //public async Task<IActionResult> Update(Guid id, Student student)
-    //{
-    //    var existing = await _context.Students.FindAsync(id);
-    //    if (existing == null) return NotFound("Student not found");
-    //    existing.Name = student.Name;
-    //    existing.Mobile = student.Mobile;
-    //    existing.Dob = student.Dob;
-    //    existing.CountryId = student.CountryId;
-    //    existing.Gender = student.Gender;
-    //    existing.IsIndian = student.IsIndian;
-    //    await _context.SaveChangesAsync();
-    //    return Ok(new { message = "Updated Successfully", id });
-    //}
 
 
 
@@ -116,48 +102,6 @@ public class StudentController : ControllerBase
 
 
 
-    //[HttpPatch("{id}")]
-    //public IActionResult Patch(Guid id, [FromBody] Student student)
-    //{
-    //    using var con = new NpgsqlConnection(_connectionString);
-    //    con.Open();
-    //    var updates = new List<string>();
-    //    var cmd = new NpgsqlCommand();
-    //    cmd.Connection = con;
-    //    if (!string.IsNullOrEmpty(student.Name))
-    //    {
-    //        updates.Add("\"Name\"=@name");
-    //        cmd.Parameters.AddWithValue("@name", student.Name);
-    //    }
-    //    if (!string.IsNullOrEmpty(student.Mobile))
-    //    {
-    //        updates.Add("\"Mobile\"=@mobile");
-    //        cmd.Parameters.AddWithValue("@mobile", student.Mobile);
-    //    }
-    //    if (student.Dob != default)
-    //    {
-    //        updates.Add("\"Dob\"=@dob");
-    //        cmd.Parameters.AddWithValue("@dob", student.Dob);
-    //    }
-    //    if (student.CountryId != Guid.Empty)
-    //    {
-    //        updates.Add("\"CountryId\"=@countryId");
-    //        cmd.Parameters.AddWithValue("@countryId", student.CountryId);
-    //    }
-    //    if (!string.IsNullOrEmpty(student.Gender))
-    //    {
-    //        updates.Add("\"Gender\"=@gender");
-    //        cmd.Parameters.AddWithValue("@gender", student.Gender);
-    //    }
-    //    updates.Add("\"IsIndian\"=@isIndian");
-    //    cmd.Parameters.AddWithValue("@isIndian", student.IsIndian);
-    //    if (updates.Count == 0) return BadRequest("No fields to update");
-    //    cmd.CommandText = $"UPDATE \"Students\" SET {string.Join(",", updates)} WHERE \"Id\"=@id";
-    //    cmd.Parameters.AddWithValue("@id", id);
-    //    int rows = cmd.ExecuteNonQuery();
-    //    if (rows == 0) return NotFound("Student not found");
-    //    return Ok(new { message = "Updated Successfully", id });
-    //}
 
     [HttpDelete("{id}")]
     public IActionResult Delete(Guid id)
