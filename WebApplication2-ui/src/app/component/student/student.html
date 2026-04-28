@@ -1,0 +1,106 @@
+<div class="card">
+
+  <h2>Student Form</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <input placeholder="Name" formControlName="name">
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+      Name is required
+    </div>
+
+    <input placeholder="Mobile" formControlName="mobile">
+    <div *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid">
+      Enter valid 10-digit mobile
+    </div>
+
+    <input type="date" formControlName="dob">
+
+    <!-- <select formControlName="countryId">
+      <option [ngValue]="null">Select Country</option>
+      <option *ngFor="let c of countries" [value]="c.id">
+        {{c.name}}
+      </option>
+    </select> -->
+
+
+
+
+<div style="display:flex; align-items:center; gap:6px;">
+
+  <select formControlName="countryId">
+    <option [ngValue]="null">Select Country</option>
+    <option *ngFor="let c of countries" [value]="c.id">
+      {{c.name}}
+    </option>
+  </select>
+
+  <!-- 👉 BUTTON RIGHT SIDE -->
+  <button type="button" (click)="openModal()">Add</button>
+
+</div>
+
+
+
+
+
+
+    <div style="margin-bottom:10px;">
+      <label><input type="radio" value="Male" formControlName="gender"> Male</label>
+      <label><input type="radio" value="Female" formControlName="gender"> Female</label>
+      <label><input type="radio" value="Transgender" formControlName="gender"> Transgender</label>
+    </div>
+
+    <label>
+      <input type="checkbox" formControlName="isIndian" value=true> Indian
+    </label>
+
+    <br><br>
+
+    <button type="submit" [disabled]="form.invalid">Save</button>
+    <button type="button" (click)="reset()">Reset</button>
+
+  </form>
+
+</div>
+
+<div class="card">
+
+  <h2>Student List</h2>
+
+  <table>
+    <tr>
+      <th>#</th><th>Name</th><th>Mobile</th><th>DOB</th><th>Country</th><th>Action</th>
+    </tr>
+
+    <tr *ngFor="let s of students; let i=index">
+      <td>{{i+1}}</td>
+      <td>{{s.name}}</td>
+      <td>{{s.mobile}}</td>
+      <td>{{s.dob | date}}</td>
+      <td>{{s.country}}</td>
+      <td>
+        <button (click)="edit(s)">Edit</button>
+        <button (click)="delete(s.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+<!-- 🔥 COUNTRY MODAL -->
+<div class="modal" *ngIf="showModal">
+
+  <div class="modal-box">
+
+    <!-- Close Button -->
+    <button class="close-btn" (click)="closeModal()">X</button>
+
+    <!-- Your Existing Country Component -->
+    <app-country></app-country>
+
+  </div>
+
+</div>
+

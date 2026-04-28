@@ -1,0 +1,43 @@
+<div class="card">
+
+  <h2>Country Form</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input placeholder="Name" formControlName="name">
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+      Name is required
+    </div>
+
+    <input type="number" placeholder="Sort Order" formControlName="sortOrder">
+    <div *ngIf="form.get('sortOrder')?.touched && form.get('sortOrder')?.invalid">
+      Sort Order is required
+    </div>
+
+    <button type="submit" [disabled]="form.invalid">Save</button>
+    <button type="button" (click)="reset()">Reset</button>
+  </form>
+
+</div>
+
+<div class="card">
+
+  <h2>Country List</h2>
+
+  <table>
+    <tr>
+      <th>#</th><th>Name</th><th>Order</th><th>Action</th>
+    </tr>
+
+    <tr *ngFor="let c of countries; let i=index">
+      <td>{{i+1}}</td>
+      <td>{{c.name}}</td>
+      <td>{{c.sortOrder}}</td>
+      <td>
+        <button (click)="edit(c)">Edit</button>
+        <button (click)="delete(c.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
